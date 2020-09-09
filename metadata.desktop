@@ -1,16 +1,13 @@
 [SddmGreeterTheme]
-Name=Maldives
-Description=Maldives Theme
-Author=Abdurrahman AVCI
-Copyright=(c) 2013, Abdurrahman AVCI
-License=CC-BY-SA
+Name=Musicaflight
+Description=Musicaflight ribbons theme
+Author=municorn
 Type=sddm-theme
 Version=0.1
 Website=https://github.com/sddm/sddm
-Screenshot=maldives.jpg
 MainScript=Main.qml
 ConfigFile=theme.conf
 TranslationsDirectory=translations
-Email=abdurrahmanavci@gmail.com
-Theme-Id=maldives
+Email=municorn@musicaloft.com
+Theme-Id=musicaflight
 Theme-API=2.0
