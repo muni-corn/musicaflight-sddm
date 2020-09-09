@@ -44,6 +44,8 @@ Rectangle {
 
         Column {
             id: clock
+            anchors.leftMargin: 256
+            anchors.left: parent.left
 
             property date dateTime: new Date()
 
@@ -55,15 +57,12 @@ Rectangle {
             Text {
                 id: time
                 anchors.topMargin: 128
-                anchors.leftMargin: 256
-                anchors.bottomMargin: 0
                 anchors.top: parent.top
                 anchors.left: parent.left
 
                 color: "white"
 
                 text : Qt.formatTime(clock.dateTime, "hh:mm")
-
 
                 font.pixelSize: 128
                 font.weight: Font.Thin
@@ -73,7 +72,7 @@ Rectangle {
                 id: date
                 anchors.topMargin: 168
                 anchors.top: time.top
-                anchors.left: time.left
+                anchors.left: parent.left
 
                 color: "white"
 
@@ -83,192 +82,175 @@ Rectangle {
             }
         }
 
-        Image {
-            id: rectangle
-            anchors.centerIn: parent
-            width: Math.max(320, mainColumn.implicitWidth + 50)
-            height: Math.max(320, mainColumn.implicitHeight + 50)
+        Column {
+            id: mainColumn
+            spacing: 12
 
-            source: "rectangle.png"
+            anchors.left: clock.left
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 128
+
+            Text {
+                color: "white"
+                verticalAlignment: Text.AlignVCenter
+                height: text.implicitHeight
+                text: qsTr("Hello")
+                wrapMode: Text.WordWrap
+                font.pixelSize: 24
+                elide: Text.ElideRight
+                horizontalAlignment: Text.AlignHCenter
+            }
 
             Column {
-                id: mainColumn
-                anchors.centerIn: parent
-                spacing: 12
+                width: parent.width
+                spacing: 4
                 Text {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    color: "black"
-                    verticalAlignment: Text.AlignVCenter
-                    height: text.implicitHeight
+                    id: lblName
                     width: parent.width
-                    text: textConstants.welcomeText.arg(sddm.hostName)
-                    wrapMode: Text.WordWrap
-                    font.pixelSize: 24
-                    elide: Text.ElideRight
-                    horizontalAlignment: Text.AlignHCenter
+                    text: textConstants.userName
+                    font.pointSize: 11
+                    color: "white"
                 }
 
-                Column {
-                    width: parent.width
-                    spacing: 4
-                    Text {
-                        id: lblName
-                        width: parent.width
-                        text: textConstants.userName
-                        font.bold: true
-                        font.pixelSize: 12
-                    }
+                TextBox {
+                    id: name
+                    width: parent.width; height: 32
+                    text: userModel.lastUser
+                    font.pointSize: 11
 
-                    TextBox {
-                        id: name
-                        width: parent.width; height: 30
-                        text: userModel.lastUser
-                        font.pixelSize: 14
+                    KeyNavigation.backtab: rebootButton; KeyNavigation.tab: password
 
-                        KeyNavigation.backtab: rebootButton; KeyNavigation.tab: password
-
-                        Keys.onPressed: {
-                            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                                sddm.login(name.text, password.text, sessionIndex)
-                                event.accepted = true
-                            }
+                    Keys.onPressed: {
+                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                            sddm.login(name.text, password.text, sessionIndex)
+                            event.accepted = true
                         }
                     }
                 }
+            }
 
-                Column {
+            Column {
+                width: parent.width
+                spacing: 4
+                Text {
+                    id: lblPassword
                     width: parent.width
-                    spacing : 4
-                    Text {
-                        id: lblPassword
-                        width: parent.width
-                        text: textConstants.password
-                        font.bold: true
-                        font.pixelSize: 12
-                    }
+                    text: textConstants.password
+                    font.pointSize: 11
+                    color: "white"
+                }
 
-                    PasswordBox {
-                        id: password
-                        width: parent.width; height: 30
-                        font.pixelSize: 14
+                PasswordBox {
+                    id: password
+                    width: parent.width; height: 32
+                    font.pointSize: 11
 
-                        KeyNavigation.backtab: name; KeyNavigation.tab: session
+                    KeyNavigation.backtab: name; KeyNavigation.tab: session
 
-                        Keys.onPressed: {
-                            if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
-                                sddm.login(name.text, password.text, sessionIndex)
-                                event.accepted = true
-                            }
+                    Keys.onPressed: {
+                        if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
+                            sddm.login(name.text, password.text, sessionIndex)
+                            event.accepted = true
                         }
                     }
                 }
+            }
 
-                Row {
-                    spacing: 4
-                    width: parent.width / 2
+            Row {
+                spacing: 4
+                width: parent.width / 2
+                z: 100
+
+                Column {
                     z: 100
+                    width: parent.width * 1.3
+                    spacing : 4
+                    anchors.bottom: parent.bottom
 
-                    Column {
-                        z: 100
-                        width: parent.width * 1.3
-                        spacing : 4
-                        anchors.bottom: parent.bottom
-
-                        Text {
-                            id: lblSession
-                            width: parent.width
-                            text: textConstants.session
-                            wrapMode: TextEdit.WordWrap
-                            font.bold: true
-                            font.pixelSize: 12
-                        }
-
-                        ComboBox {
-                            id: session
-                            width: parent.width; height: 30
-                            font.pixelSize: 14
-
-                            arrowIcon: "angle-down.png"
-
-                            model: sessionModel
-                            index: sessionModel.lastIndex
-
-                            KeyNavigation.backtab: password; KeyNavigation.tab: layoutBox
-                        }
+                    Text {
+                        id: lblSession
+                        width: parent.width
+                        text: textConstants.session
+                        wrapMode: TextEdit.WordWrap
+                        font.pointSize: 11
+                        color: "white"
                     }
 
-                    Column {
-                        z: 101
-                        width: parent.width * 0.7
-                        spacing : 4
-                        anchors.bottom: parent.bottom
+                    ComboBox {
+                        id: session
+                        width: parent.width; height: 32
+                        font.pointSize: 11
 
-                        Text {
-                            id: lblLayout
-                            width: parent.width
-                            text: textConstants.layout
-                            wrapMode: TextEdit.WordWrap
-                            font.bold: true
-                            font.pixelSize: 12
-                        }
+                        arrowIcon: "angle-down.png"
 
-                        LayoutBox {
-                            id: layoutBox
-                            width: parent.width; height: 30
-                            font.pixelSize: 14
+                        model: sessionModel
+                        index: sessionModel.lastIndex
 
-                            arrowIcon: "angle-down.png"
-
-                            KeyNavigation.backtab: session; KeyNavigation.tab: loginButton
-                        }
+                        KeyNavigation.backtab: password; KeyNavigation.tab: layoutBox
                     }
                 }
 
                 Column {
-                    width: parent.width
+                    z: 101
+                    width: parent.width * 0.7
+                    spacing : 4
+                    anchors.bottom: parent.bottom
+
                     Text {
-                        id: errorMessage
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: textConstants.prompt
-                        font.pixelSize: 10
+                        id: lblLayout
+                        width: parent.width
+                        text: textConstants.layout
+                        wrapMode: TextEdit.WordWrap
+                        font.pointSize: 11
+                        color: "white"
+                    }
+
+                    LayoutBox {
+                        id: layoutBox
+                        width: parent.width; height: 32
+                        font.pointSize: 11
+
+                        arrowIcon: "angle-down.png"
+
+                        KeyNavigation.backtab: session; KeyNavigation.tab: loginButton
                     }
                 }
+            }
 
-                Row {
-                    spacing: 4
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    property int btnWidth: Math.max(loginButton.implicitWidth,
-                    shutdownButton.implicitWidth,
-                    rebootButton.implicitWidth, 80) + 8
-                    Button {
-                        id: loginButton
-                        text: textConstants.login
-                        width: parent.btnWidth
+            Row {
+                spacing: 4
+                anchors.horizontalCenter: parent.horizontalCenter
+                property int btnWidth: Math.max(loginButton.implicitWidth,
+                shutdownButton.implicitWidth,
+                rebootButton.implicitWidth, 80) + 8
+                Button {
+                    id: loginButton
+                    text: textConstants.login
+                    width: parent.btnWidth
 
-                        onClicked: sddm.login(name.text, password.text, sessionIndex)
+                    onClicked: sddm.login(name.text, password.text, sessionIndex)
 
-                        KeyNavigation.backtab: layoutBox; KeyNavigation.tab: shutdownButton
-                    }
+                    KeyNavigation.backtab: layoutBox; KeyNavigation.tab: shutdownButton
+                }
 
-                    Button {
-                        id: shutdownButton
-                        text: textConstants.shutdown
-                        width: parent.btnWidth
+                Button {
+                    id: shutdownButton
+                    text: textConstants.shutdown
+                    width: parent.btnWidth
 
-                        onClicked: sddm.powerOff()
+                    onClicked: sddm.powerOff()
 
-                        KeyNavigation.backtab: loginButton; KeyNavigation.tab: rebootButton
-                    }
+                    KeyNavigation.backtab: loginButton; KeyNavigation.tab: rebootButton
+                }
 
-                    Button {
-                        id: rebootButton
-                        text: textConstants.reboot
-                        width: parent.btnWidth
+                Button {
+                    id: rebootButton
+                    text: textConstants.reboot
+                    width: parent.btnWidth
 
-                        onClicked: sddm.reboot()
+                    onClicked: sddm.reboot()
 
-                        KeyNavigation.backtab: shutdownButton; KeyNavigation.tab: name
-                    }
+                    KeyNavigation.backtab: shutdownButton; KeyNavigation.tab: name
                 }
             }
         }
