@@ -84,7 +84,7 @@ Rectangle {
 
         Column {
             id: mainColumn
-            spacing: 12
+            spacing: 16
 
             anchors.left: clock.left
             anchors.bottom: parent.bottom
@@ -114,6 +114,13 @@ Rectangle {
 
                 TextBox {
                     id: name
+
+                    radius: 8
+                    color: "#00000000"
+                    textColor: "white"
+                    borderColor: "#40ffffff"
+                    hoverColor: "white"
+                    focusColor: "white"
                     width: parent.width; height: 32
                     text: userModel.lastUser
                     font.pointSize: 11
@@ -142,6 +149,13 @@ Rectangle {
 
                 PasswordBox {
                     id: password
+
+                    radius: 8
+                    color: "#00000000"
+                    textColor: "white"
+                    borderColor: "#40ffffff"
+                    hoverColor: "white"
+                    focusColor: "white"
                     width: parent.width; height: 32
                     font.pointSize: 11
 
@@ -178,6 +192,12 @@ Rectangle {
 
                     ComboBox {
                         id: session
+
+                        color: "#00000000"
+                        textColor: "white"
+                        borderColor: "#40ffffff"
+                        hoverColor: "white"
+                        focusColor: "white"
                         width: parent.width; height: 32
                         font.pointSize: 11
 
@@ -207,6 +227,12 @@ Rectangle {
 
                     LayoutBox {
                         id: layoutBox
+
+                        color: "#00000000"
+                        textColor: "white"
+                        borderColor: "#40ffffff"
+                        hoverColor: "white"
+                        focusColor: "white"
                         width: parent.width; height: 32
                         font.pointSize: 11
 
@@ -228,6 +254,12 @@ Rectangle {
                     text: textConstants.login
                     width: parent.btnWidth
 
+                    borderColor: "white"
+                    textColor: "white"
+                    color: "#00ffffff"
+                    activeColor: "#40ffffff"
+                    pressedColor: "#80ffffff"
+
                     onClicked: sddm.login(name.text, password.text, sessionIndex)
 
                     KeyNavigation.backtab: layoutBox; KeyNavigation.tab: shutdownButton
@@ -238,6 +270,12 @@ Rectangle {
                     text: textConstants.shutdown
                     width: parent.btnWidth
 
+                    borderColor: "white"
+                    textColor: "white"
+                    color: "#00ffffff"
+                    activeColor: "#40ffffff"
+                    pressedColor: "#80ffffff"
+
                     onClicked: sddm.powerOff()
 
                     KeyNavigation.backtab: loginButton; KeyNavigation.tab: rebootButton
@@ -247,6 +285,12 @@ Rectangle {
                     id: rebootButton
                     text: textConstants.reboot
                     width: parent.btnWidth
+
+                    borderColor: "white"
+                    textColor: "white"
+                    color: "#00ffffff"
+                    activeColor: "#40ffffff"
+                    pressedColor: "#80ffffff"
 
                     onClicked: sddm.reboot()
 
